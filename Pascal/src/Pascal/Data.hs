@@ -1,7 +1,7 @@
 -- This file contains the data-structures for the AST
 -- The role of the parser is to build the AST (Abstract Syntax Tree) 
 
-module Pascal.Data
+module Data
     (
         Exp(..),
         BoolExp(..),
@@ -21,6 +21,8 @@ data Exp =
     | Real Float
     -- variable: e.g. Var "x"
     | Var String
+    --variable: e.g. Interger 1
+    | Integer Int
 
 -- Data-structure for boolean expressions
 data BoolExp = 

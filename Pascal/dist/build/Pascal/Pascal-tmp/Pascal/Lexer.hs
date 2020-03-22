@@ -613,7 +613,7 @@ alex_actions = array (0 :: Int, 19)
   , (0,alex_action_6)
   ]
 
-{-# LINE 47 "src\Pascal\Lexer.x" #-}
+{-# LINE 48 "src\Pascal\Lexer.x" #-}
 
 
 -- Some action helpers:
@@ -631,6 +631,7 @@ tokenToPosN (Token p _) = p
 
 
 -- TODO: Add your own token types here
+-- Float and boolean
 data TokenClass
  = TokenOp     String
  | TokenK      String
