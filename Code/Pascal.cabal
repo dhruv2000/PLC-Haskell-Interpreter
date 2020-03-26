@@ -7,7 +7,7 @@ version:             0.1.0.0
 -- description:         
 license:             MIT
 license-file:        LICENSE
-author:              Change Me
+author:              Jonathan
 maintainer:          change@ufl.edu
 -- copyright:           
 category:            Text
@@ -18,8 +18,8 @@ cabal-version:       >=1.10
 executable Pascal
   main-is:             Main.hs
   -- other-modules:       
-  other-modules:       
-                     Interpret
+  other-modules:       Interpret
+                     , Pascal
                      , Parser
                      , Lexer
                      , Data
@@ -31,7 +31,7 @@ executable Pascal
                       , array
                       , hspec
 
-  hs-source-dirs:      src
+  -- hs-source-dirs:      src
   build-tools:         happy, alex
   default-language:    Haskell2010
   ghc-options:         -Wall

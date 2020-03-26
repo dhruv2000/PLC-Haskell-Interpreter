@@ -1,6 +1,6 @@
-module Pascal.Base where
+module Base where
 
-import Pascal.Lexer
+import Lexer
 ----------------------------------------------------------------------------
 
 -- For readablity - these are the interfaces Happy expects:

@@ -3,11 +3,11 @@
 #if __GLASGOW_HASKELL__ >= 710
 {-# OPTIONS_GHC -XPartialTypeSignatures #-}
 #endif
-module Pascal.Parser where
+module Parser where
 
-import Pascal.Base
-import Pascal.Data
-import Pascal.Lexer
+import Base
+import Data
+import Lexer
 import qualified Data.Array as Happy_Data_Array
 import qualified Data.Bits as Bits
 import qualified GHC.Exts as Happy_GHC_Exts

@@ -1,4 +1,4 @@
-module Pascal.Wrapper
+module Wrapper
   ( parse
   , parseString
   , Error(..)
@@ -12,9 +12,9 @@ import qualified Data.ByteString.Lazy.Char8 as BLC
 
 import           Data.List            (isPrefixOf)
 ----
-import           Pascal.Lexer            (runAlex)
-import           Pascal.Data            (Program)
-import           Pascal.Parser          (happyParser)
+import           Lexer            (runAlex)
+import           Data            (Program)
+import           Parser          (happyParser)
 ----------------------------------------------------------------------------
 
 data ErrClass

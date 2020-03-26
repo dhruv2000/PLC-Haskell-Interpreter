@@ -11,7 +11,7 @@
 {-# OPTIONS_GHC -fno-warn-tabs                  #-}
 {-# OPTIONS_GHC -funbox-strict-fields           #-}
 
-module Pascal.Lexer
+module Lexer
   ( Alex(..)
   , AlexPosn(..)
   , AlexState(..)
@@ -35,11 +35,10 @@ $alpha = [a-zA-Z]               -- alphabetic characters
 
 
 -- TODO: Map symbols into token types (with or without parameters)
--- Float and boolean
 tokens :-
   $white+                               ; -- remove multiple white-spaces
   "//".*                                ; -- skip one line comments
-  $digit+                               { tok_read     TokenInt }
+  $digit+\.$digit*                      { tok_read     TokenFloat }
   [\+]|[\-]|[\*]|[\/]|[=]               { tok_read     TokenOp }
   [\(]|[\)]|begin|end|true|false        { tok_read     TokenK }
   [:=]                                  { tok_read     TokenOp }
@@ -62,11 +61,13 @@ tokenToPosN (Token p _) = p
 
 
 -- TODO: Add your own token types here
--- Float and boolean
+-- THIS IS THE GLUE BETWEEN HAPPY AND ALEX
+ 
 data TokenClass
  = TokenOp     String
  | TokenK      String
  | TokenInt    Int
+ | TokenFloat   Float
  | TokenID    String
  | TokenEOF
  deriving (Eq, Show)
