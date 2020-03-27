@@ -21,20 +21,33 @@ import Lexer
         int             { Token _ (TokenInt $$) }
         float           { Token _ (TokenFloat $$) }
         ID              { Token _ (TokenID $$)  }
+        '<'             { Token _ (TokenOp "<")   }
+        '>'             { Token _ (TokenOp ">")   }
+        '<='            { Token _ (TokenOp "<=")   }
+        '>='            { Token _ (TokenOp ">=")   }
         '+'             { Token _ (TokenOp "+")   }
         '-'             { Token _ (TokenOp "-")   }
         '*'             { Token _ (TokenOp "*")   }
         '/'             { Token _ (TokenOp "/")   }
         '='             { Token _ (TokenOp "=")   }
+        ':='            { Token _ (TokenOp ":=")   }
         '('             { Token _ (TokenK  "(")   }
         ')'             { Token _ (TokenK  ")")   }
         'begin'         { Token _ (TokenK "begin") }
         'end'           { Token _ (TokenK "end")  }
-        ':='            { Token _ (TokenK ":=")   }
         'true'          { Token _ (TokenK "true") }
         'false'         { Token _ (TokenK "false") }
+        'sqrt'          { Token _ (TokenK "sqrt") } 
+        'log'           { Token _ (TokenK "log") }
+        'sin'           { Token _ (TokenK "sin")  }
+        'exp'           { Token _ (TokenK "exp")  }
+        'cos'           { Token _ (TokenK "false")}
         'and'           { Token _ (TokenK "and") }
         'not'           { Token _ (TokenK "not") }
+        'for'           { Token _ (TokenK "for") }
+        'to'            { Token _ (TokenK "to") }
+        'while'         { Token _ (TokenK "while") }
+        'do'            { Token _ (TokenK "do") }
         'var'           { Token _ (TokenK "var") }
         ':'             { Token _ (TokenK ":") }
         'bool'          { Token _ (TokenK "bool") }
@@ -42,6 +55,7 @@ import Lexer
         'string'        { Token _ (TokenK "string") }
         ','             { Token _ (TokenK ",") }
         'ID_List'       { Token _ (TokenK "ID_List") }
+        'program'       { Token _ (TokenK "program") }
 
 -- associativity of operators in reverse precedence order
 %nonassoc '>' '>=' '<' '<=' '==' '!='
@@ -78,6 +92,7 @@ Exp :: {Exp}
     | Exp '+' Exp { Op2 "+" $1 $3 }
     | Exp '*' Exp { Op2 "*" $1 $3 }
     | '(' Exp ')' { $2 } -- ignore brackets
+    | ID { Var $1 }
 
 BoolExp :: {BoolExp}
     : 'true' { True_C }
@@ -94,6 +109,7 @@ GenExp :: {GenExp}
     : Exp { FloatExp $1 }
     | BoolExp { BExp $1 }
 
+--This needs to be added to
 Statement :: {Statement}
     : ID ':=' GenExp { Assign $1 $3 }
     

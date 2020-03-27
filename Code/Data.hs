@@ -23,8 +23,8 @@ data Exp =
     -- real value: e.g. Real 1.0
     | Real Float
     -- variable: e.g. Var "x"
-    -- I don't think its necessary
-    -- | Var String
+    -- I don't think its necessary - but we agree on it
+    | Var String
 
 -- Data-structure for boolean expressions
 data BoolExp = 
@@ -45,7 +45,7 @@ data GenExp = FloatExp Exp | BExp BoolExp
 data Statement = 
     -- TODO: add other statements
     -- Variable assignment
-     Assign String GenExp
+    Assign String GenExp
     -- If statement
     | If BoolExp Statement Statement
     -- Block

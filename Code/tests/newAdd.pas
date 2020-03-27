@@ -1,4 +1,4 @@
 begin 
-    newVariable := (7.0) + (6.0);
-    tempVar := (6.5);
+    var temp : real;
+    temp := (7.0) + (6.0);
 end

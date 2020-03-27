@@ -48,7 +48,6 @@ bibOp1 "Not" False = True
 
 bibOp2 :: String -> Bool -> Bool -> Bool
 bibOp2 "AND" b1 b2 = b1 && b2
-bibOp2 "<" b1 b2 = b1 < b2	
 bibOp2 "OR" b1 b2 = b1 || b2
 
 -- relational binary operator( takes in 2 values)
@@ -57,14 +56,14 @@ relBiOp "<" b1 b2 = b1 < b2
 relBiOp ">" b1 b2 = b1 > b2
 relBiOp "<=" b1 b2 = b1 <= b2
 relBiOp ">=" b1 b2 = b1 >= b2
-relBiOp "=" b1 b2 = b1 = b2
+relBiOp "=" b1 b2 = b1 == b2
 
 -- boolean operations for top one -- and/or
 boolIntExp :: BoolExp -> Bool 
 boolIntExp True_C = True
 boolIntExp False_C = False
 boolIntExp (Not e1) = bibOp1 "NOT" (boolIntExp e1)
-boolIntExp (OpB op v1 v2) = bibOp2 op (intExp v1) (intExp v2) 
+boolIntExp (OpB op v1 v2) = bibOp2 op (boolIntExp v1) (boolIntExp v2) 
 boolIntExp (Comp op e1 e2) = relBiOp op (intExp e1) (intExp e2)
 -- make sure you write test unit cases for all functions
 
