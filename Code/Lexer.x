@@ -40,7 +40,7 @@ tokens :-
   "//".*                                ; -- skip one line comments
   $digit+\.$digit*                      { tok_read     TokenFloat }
   [\+]|[\-]|[\*]|[\/]|[=][:=]           { tok_read     TokenOp }
-  [\<]|[\>]                             { tok_read     TokenOp }
+  [\<]|[\>]|\<=|\>=                     { tok_read     TokenOp }
   [\(]|[\)]|begin|end|true|false        { tok_read     TokenK }
   [\:]|and|not|var|bool|real|string     { tok_read     TokenK }
   while|do|for|to                       { tok_read     TokenK }
