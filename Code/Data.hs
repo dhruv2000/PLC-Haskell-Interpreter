@@ -23,7 +23,8 @@ data Exp =
     -- real value: e.g. Real 1.0
     | Real Float
     -- variable: e.g. Var "x"
-    | Var String
+    -- I don't think its necessary
+    -- | Var String
 
 -- Data-structure for boolean expressions
 data BoolExp = 
@@ -49,6 +50,10 @@ data Statement =
     | If BoolExp Statement Statement
     -- Block
     | Block [Statement]
+    -- While loop
+    | While BoolExp [Statement]
+    -- For loop
+    | For String GenExp BoolExp [Statement]
 
 data VType = REAL | BOOL | STRING;
 
