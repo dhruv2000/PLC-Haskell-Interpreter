@@ -56,6 +56,7 @@ import Lexer
         ','             { Token _ (TokenK ",") }
         'ID_List'       { Token _ (TokenK "ID_List") }
         'program'       { Token _ (TokenK "program") }
+        'writeln('      { Token _ (TokenK "writeln(") }
 
 -- associativity of operators in reverse precedence order
 %nonassoc '>' '>=' '<' '<=' '==' '!='
@@ -112,7 +113,8 @@ GenExp :: {GenExp}
 
 --This needs to be added to
 Statement :: {Statement}
-    : ID ':=' GenExp { Assign $1 $3 }
+    : ID ':=' GenExp { Assign $1 $3 } 
+    | 'writeln(' GenExp ')' {Write $2}
     
 
 {}

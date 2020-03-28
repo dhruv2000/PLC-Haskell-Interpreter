@@ -46,6 +46,8 @@ data Statement =
     -- TODO: add other statements
     -- Variable assignment
     Assign String GenExp
+    --Writeln
+    | Write GenExp
     -- If statement
     | If BoolExp Statement Statement
     -- Block

@@ -27,6 +27,7 @@ executable Pascal
                      , Wrapper
   -- other-extensions:    
   build-depends:       base >=4.7
+                      , containers
                       , bytestring
                       , array
                       , hspec

@@ -1,6 +1,7 @@
 module Interpret 
 (
     interpret,
+    interpretStart,
     biOp2,
     biOp1,
     bibOp1,
@@ -11,14 +12,23 @@ module Interpret
 where
 
 import Data
+import Data.Maybe (isNothing)
+import qualified Data.Map.Strict as Map
+import Debug.Trace
 
 -- TODO: define auxiliary functions to aid interpretation
 -- Feel free to put them here or in different modules
 -- Hint: write separate evaluators for numeric and
 -- boolean expressions and for statements
 
-evalFloatExp :: Exp -> String
-evalFloatExp (Real x) = (show x);
+evalFloatExp :: Exp -> [Map.Map String (String, String)] -> String
+evalFloatExp (Real x) m = (show x);
+evalFloatExp (Var s) m = if isNothing $ Map.lookup s $ head m
+                                  then evalFloatExp (Var s) $ tail m
+                                  else show $ Map.lookup s $ head m
+evalFloatExp (Var s) [m] = if isNothing $ Map.lookup s m
+                                  then error("Variable " ++ s ++ " is undefined")
+                                  else show $ Map.lookup s m
 
 --THIS IS LIKELY WHERE YOU WILL INTERPRET THE INFO
 biOp1 :: String -> Float -> Float
@@ -29,7 +39,7 @@ uniOp1 :: String -> Float -> Float
 uniOp1 "-" v1 = (-v1)
 uniOp1 "sqrt" v1 = sqrt v1
 uniOp1 "ln" v1 = log v1
-uniOp1 "sin" v1 = sin v1	
+uniOp1 "sin" v1 = sin v1
 uniOp1 "cos" v1 = cos v1
 uniOp1 "exp" v1 = exp v1
 
@@ -72,13 +82,21 @@ boolIntExp (Comp op e1 e2) = relBiOp op (intExp e1) (intExp e2)
 -- make sure you write test unit cases for all functions
 
 interpret :: Program -> String;
--- TODO: write the interpreter
+-- Initiates interpreting with an empty global scope
 interpret [] = "";
-interpret (x:xs) = interpretStatement x ++ "\n" ++ interpret xs;
-interpret _ = "Not implemented"
+interpret x = interpretStart x [Map.empty]
 
-interpretStatement :: Statement -> String; -- might have to chagne String later
-interpretStatement (Assign a b) = case b of -- temp
-    FloatExp e -> let evaluated = (evalFloatExp e) in
-        a ++ " assigned to " ++ evaluated
-    BExp e -> "its a bool\n";
+--Starting point after gettign a global scope
+interpretStart :: Program -> [Map.Map String (String, String)] -> String
+interpretStart [] m = ""
+interpretStart (x:xs) m = let curr = interpretStatement x m in
+      (fst curr) ++ (interpretStart xs $ snd curr)
+
+interpretStatement :: Statement -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)])
+interpretStatement (Write a) m = case a of
+    FloatExp e -> let evaluated = evalFloatExp e m in
+        trace ("e is " ++ evaluated) (evaluated ++ "\n", m) 
+-- TODO: Add bools
+interpretStatement (Assign a b) maps = case b of
+    FloatExp e -> let evaluated = evalFloatExp e maps in
+                   ("", Map.insert a ("Float", evaluated) (head maps) : tail maps)
