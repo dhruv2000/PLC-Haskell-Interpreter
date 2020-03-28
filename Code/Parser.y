@@ -93,6 +93,7 @@ Exp :: {Exp}
     | Exp '*' Exp { Op2 "*" $1 $3 }
     | '(' Exp ')' { $2 } -- ignore brackets
     | ID { Var $1 }
+    | float { Real $1 }
 
 BoolExp :: {BoolExp}
     : 'true' { True_C }

@@ -6,6 +6,7 @@ module Interpret
     bibOp1,
     bibOp2,
     intExp
+
 )
 where
 
@@ -15,6 +16,9 @@ import Data
 -- Feel free to put them here or in different modules
 -- Hint: write separate evaluators for numeric and
 -- boolean expressions and for statements
+
+evalFloatExp :: Exp -> String
+evalFloatExp (Real x) = (show x);
 
 --THIS IS LIKELY WHERE YOU WILL INTERPRET THE INFO
 biOp1 :: String -> Float -> Float
@@ -67,6 +71,14 @@ boolIntExp (OpB op v1 v2) = bibOp2 op (boolIntExp v1) (boolIntExp v2)
 boolIntExp (Comp op e1 e2) = relBiOp op (intExp e1) (intExp e2)
 -- make sure you write test unit cases for all functions
 
-interpret :: Program -> String
+interpret :: Program -> String;
 -- TODO: write the interpreter
+interpret [] = "";
+interpret (x:xs) = interpretStatement x ++ "\n" ++ interpret xs;
 interpret _ = "Not implemented"
+
+interpretStatement :: Statement -> String; -- might have to chagne String later
+interpretStatement (Assign a b) = case b of -- temp
+    FloatExp e -> let evaluated = (evalFloatExp e) in
+        a ++ " assigned to " ++ evaluated
+    BExp e -> "its a bool\n";
