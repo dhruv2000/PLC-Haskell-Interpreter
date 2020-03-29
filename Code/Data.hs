@@ -14,17 +14,17 @@ module Data
 
 -- Data-structure for  numeric expressions
 data Exp = 
+    -- variable: e.g. Var "x"
+    Var String
     -- unary operator: Op name expression
-    Op1 String Exp
+    | Op1 String Exp
     -- binary operator: Op name leftExpression rightExpression
     | Op2 String Exp Exp
     -- function call: FunctionCall name ListArguments
     | FunCall String [Exp]
     -- real value: e.g. Real 1.0
     | Real Float
-    -- variable: e.g. Var "x"
     -- I don't think its necessary - but we agree on it
-    | Var String
 
 -- Data-structure for boolean expressions
 data BoolExp = 
@@ -39,7 +39,8 @@ data BoolExp =
     | False_C
     | Var_B String
 
-data GenExp = FloatExp Exp | BExp BoolExp
+-- bool Exp gone
+data GenExp = FloatExp Exp
 
 -- Data-structure for statements
 data Statement = 
@@ -69,3 +70,4 @@ data Definition =
 -- TODO: add declarations and other useful stuff
 -- Hint: make a tuple containing the other ingredients
 type Program = [Statement]
+

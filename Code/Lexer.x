@@ -39,7 +39,7 @@ tokens :-
   $white+                               ; -- remove multiple white-spaces
   "//".*                                ; -- skip one line comments
   $digit+\.$digit*                      { tok_read     TokenFloat }
-  [\+]|[\-]|[\*]|[\/]|[=]|:=           { tok_string     TokenOp }
+  [\+]|[\-]|[\*]|[\/]|[=]|:=            { tok_string     TokenOp }
   [\<]|[\>]|\<=|\>=                     { tok_string     TokenOp }
   [\(]|[\)]|begin|end|true|false        { tok_string     TokenK }
   [\:]|and|not|var|bool|real|string     { tok_string     TokenK }

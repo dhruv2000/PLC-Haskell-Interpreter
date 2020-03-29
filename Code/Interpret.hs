@@ -25,15 +25,20 @@ import Debug.Trace
 
 
 -- Variable name, (variable type, variable value being assigned)
+-- Need to do them for add subtrac, etc
 evalFloatExp :: Exp -> [Map.Map String (String, String)] -> String
-evalFloatExp (Real x) m = (show x);
-evalFloatExp (Var s) m = if isNothing $ Map.lookup s $ head m
-                                  then evalFloatExp (Var s) $ tail m
-                                  else show $ Map.lookup s $ head m
-evalFloatExp (Var s) [m] = if isNothing $ Map.lookup s m
-                                  then error("Variable " ++ s ++ " is undefined")
-                                  else show $ Map.lookup s m
+evalFloatExp (Real x) m = trace ("EvalFloatExp called: " ++ (show x)) (show x);
+evalFloatExp (Var s) m = let f = (Map.lookup s (head m)) in
+                                case f of
+                                Just f -> (snd f);
+                                Nothing -> evalFloatExp (Var s) (tail m);
+evalFloatExp (Var s) [m] = let f = (Map.lookup s m) in
+                                case f of
+                                Just f -> (snd f);
+                                Nothing -> error("Variable " ++ s ++ " is undefined");
 
+-- evalBoolExp :: BoolExp -> [Map.Map String (String, String)] -> String
+-- evalBoolExp True_C m = (show True_C);
 --THIS IS LIKELY WHERE YOU WILL INTERPRET THE INFO
 
 -- Gets called by intExp
@@ -54,7 +59,7 @@ biOp2 "/" v1 v2 = v1 / v2
 
 -- data Exp in data.hs
 intExp :: Exp -> Float
-intExp (Real v1) = v1 
+intExp (Real v1) = trace ("The intExp Called: " ++ (show v1)) v1 
 intExp (Op1 op e1) = unOp1 op (intExp e1)
 intExp (Op2 op e1 e2) = biOp2 op (intExp e1) (intExp e2)
 
@@ -96,15 +101,22 @@ interpretStart [] m = ""
 interpretStart (x:xs) m = let curr = interpretStatement x m in
       (fst curr) ++ (interpretStart xs $ snd curr)
 
+-- Variable name, (variable type, variable value being assigned)
 interpretStatement :: Statement -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)])
 interpretStatement (Write a) m = case a of
     FloatExp e -> let evaluated = evalFloatExp e m in
         ("writeln: >> " ++ evaluated ++ "\n", m)
         -- trace ("e is " ++ evaluated) (evaluated ++ "\n", m) 
         --This is something that you just added to the code 
-    -- BExp e -> let evaluated = evalFloatExp e m in
-    --     trace ("e is " ++ evaluated) (evaluated ++ "\n", m) 
+   -- BExp e -> let evaluated = evalBoolExp e m in
+        -- ("writeln: >> " ++ evaluated ++ "\n", m)
+         -- trace ("e is " ++ evaluated) (evaluated ++ "\n", m) 
 -- TODO: Add bools
-interpretStatement (Assign a b) maps = case b of
-    FloatExp e -> let evaluated = evalFloatExp e maps in
-                   (a ++ " is assigned to " ++ evaluated ++ "\n", Map.insert a ("Float", evaluated) (head maps) : tail maps)
+interpretStatement (Assign a b) maps = 
+    (
+        case b of
+            FloatExp e -> let evaluated = evalFloatExp e maps in
+                (a ++ " is assigned to " ++ evaluated ++ "\n", Map.insert a ("Real", evaluated) (head maps) : tail maps)
+            --BExp e -> let evaluated = evalFloatExp e maps in
+              --  (a ++ " is bool to " ++ evaluated ++ "\n", Map.insert a ("Real", evaluated) (head maps) : tail maps)
+    )

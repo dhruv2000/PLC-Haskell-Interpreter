@@ -56,7 +56,7 @@ import Lexer
         ','             { Token _ (TokenK ",") }
         'ID_List'       { Token _ (TokenK "ID_List") }
         'program'       { Token _ (TokenK "program") }
-        'writeln'      { Token _ (TokenK "writeln") }
+        'writeln'       { Token _ (TokenK "writeln") }
 
 -- associativity of operators in reverse precedence order
 %nonassoc '>' '>=' '<' '<=' '==' '!='
@@ -107,14 +107,14 @@ Statements :: {[Statement]}
     : { [] } -- nothing; make empty list
     | Statement Statements { $1:$2 } -- put statement as first element of statements
 
+--
 GenExp :: {GenExp}
     : Exp { FloatExp $1 }
-    | BoolExp { BExp $1 }
+    
 
 --This needs to be added to
 Statement :: {Statement}
     : ID ':=' GenExp { Assign $1 $3 } 
     | 'writeln' '(' GenExp ')' {Write $3}
     
-
 {}
