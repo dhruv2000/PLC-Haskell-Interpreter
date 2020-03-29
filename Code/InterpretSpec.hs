@@ -45,6 +45,27 @@ main = hspec $ do
 
 -- TODO later add more test cases to this test case as whole bc there are a lot of possibilites
   describe "intExp" $ do
+        context "Floats" $ do
+        it "7.0" $ do
+            intExp (Real 7.0) `shouldBe` 7.0
+    context "Negation" $ do
+        it "Negates Floats" $ do
+            intExp (Op1 "-" (Real 2.0)) `shouldBe` (-2.0)
+    context "sqrt" $ do
+        it "Calculates sqrt" $ do
+            intExp (Op1 "sqrt" (Real 9.0)) `shouldBe` 3.0
+    context "ln" $ do
+        it "Calculates ln" $ do
+            intExp (Op1 "ln" (Real 2.718)) `shouldBe` 0.999896315728952
+    context "sin" $ do
+        it "Calculates sin" $ do
+            intExp (Op1 "sin" (Real 1.57079633)) `shouldBe` 1.0
+    context "cos" $ do
+        it "Calculates cos" $ do
+            intExp (Op1 "cos" (Real 3.14159265)) `shouldBe` -(1.0)
+    context "exp" $ do
+        it "Calculates exp" $ do
+            intExp (Op1 "exp" (Real 1.0)) `shouldBe` 2.7182817
     context "+" $ do
         it "Adds Floats" $ do
             intExp (Op2 "+" (Real 2.0) (Real 3.0)) `shouldBe` 5.0

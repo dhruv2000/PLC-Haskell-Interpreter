@@ -50,7 +50,7 @@ data Statement =
     --Writeln
     | Write GenExp
     -- If statement
-    | If BoolExp Statement Statement
+    | If BoolExp [Statement]
     -- Block
     | Block [Statement]
     -- While loop

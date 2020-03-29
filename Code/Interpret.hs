@@ -36,13 +36,13 @@ evalFloatExp (Var s) [m] = let f = (Map.lookup s m) in
                                 case f of
                                 Just f -> (snd f);
                                 Nothing -> error("Variable " ++ s ++ " is undefined");
-
+evalFloatExp (Op2 op e1 e2) m = (show (intExp (Op2 op e1 e2) m));
 -- evalBoolExp :: BoolExp -> [Map.Map String (String, String)] -> String
 -- evalBoolExp True_C m = (show True_C);
 --THIS IS LIKELY WHERE YOU WILL INTERPRET THE INFO
 
 -- Gets called by intExp
-unOp1 :: String -> Float -> Float
+unOp1 :: String -> Float -> Float 
 unOp1 "-" v1 = (-v1)
 unOp1 "sqrt" v1 = sqrt v1
 unOp1 "ln" v1 = log v1
@@ -58,10 +58,19 @@ biOp2 "*" v1 v2 = v1 * v2
 biOp2 "/" v1 v2 = v1 / v2
 
 -- data Exp in data.hs
-intExp :: Exp -> Float
-intExp (Real v1) = trace ("The intExp Called: " ++ (show v1)) v1 
-intExp (Op1 op e1) = unOp1 op (intExp e1)
-intExp (Op2 op e1 e2) = biOp2 op (intExp e1) (intExp e2)
+intExp :: Exp -> [Map.Map String (String, String)] -> Float
+-- trace ("The intExp Called: " ++ (show v1))
+intExp (Real v1) m = v1
+intExp (Op1 op e1) m = unOp1 op (intExp e1 m)
+intExp (Op2 op e1 e2) m = biOp2 op (intExp e1 m) (intExp e2 m)
+intExp (Var s) m = evalVarExp s m
+-- TODO FUNCTIONS HERE FUNCALL String [Exp]
+
+evalVarExp :: String -> [Map.Map String (String, String)] -> Float
+evalVarExp s m = let f =  (Map.lookup s (head m)) in
+                                case f of
+                                Just f -> (read(snd f));
+                                Nothing -> evalVarExp s (tail m);
 
 --Negation of the boolean
 bibOp1 :: String -> Bool -> Bool
@@ -82,12 +91,12 @@ relBiOp ">=" b1 b2 = b1 >= b2
 relBiOp "=" b1 b2 = b1 == b2
 
 -- boolean operations for top one -- and/or
-boolIntExp :: BoolExp -> Bool 
-boolIntExp True_C = True
-boolIntExp False_C = False
-boolIntExp (Not e1) = bibOp1 "NOT" (boolIntExp e1)
-boolIntExp (OpB op v1 v2) = bibOp2 op (boolIntExp v1) (boolIntExp v2) 
-boolIntExp (Comp op e1 e2) = relBiOp op (intExp e1) (intExp e2)
+boolIntExp :: BoolExp -> [Map.Map String (String, String)] -> Bool 
+boolIntExp True_C m = True
+boolIntExp False_C m = False
+boolIntExp (Not e1) m = bibOp1 "NOT" (boolIntExp e1 m)
+boolIntExp (OpB op v1 v2) m = bibOp2 op (boolIntExp v1 m) (boolIntExp v2 m) 
+boolIntExp (Comp op e1 e2) m = relBiOp op (intExp e1 m) (intExp e2 m)
 -- make sure you write test unit cases for all functions
 
 interpret :: Program -> String;
@@ -120,3 +129,6 @@ interpretStatement (Assign a b) maps =
             --BExp e -> let evaluated = evalFloatExp e maps in
               --  (a ++ " is bool to " ++ evaluated ++ "\n", Map.insert a ("Real", evaluated) (head maps) : tail maps)
     )
+
+-- interpretDefinition :: [String] -> VType -> String
+-- interpretDefinition (VarDef [s] type) = 
