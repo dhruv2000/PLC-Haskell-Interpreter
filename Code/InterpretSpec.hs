@@ -122,3 +122,4 @@ main = hspec $ do
         it "Tests OR with two booleans" $ do
             boolIntExp (OpB "OR" True_C False_C) `shouldBe` True
             boolIntExp (OpB "OR" False_C False_C) `shouldBe` False
+            

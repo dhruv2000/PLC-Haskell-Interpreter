@@ -23,6 +23,8 @@ import Debug.Trace
 -- Hint: write separate evaluators for numeric and
 -- boolean expressions and for statements
 
+
+-- Variable name, (variable type, variable value being assigned)
 evalFloatExp :: Exp -> [Map.Map String (String, String)] -> String
 evalFloatExp (Real x) m = (show x);
 evalFloatExp (Var s) m = if isNothing $ Map.lookup s $ head m
@@ -88,7 +90,7 @@ interpret :: Program -> String;
 interpret [] = "";
 interpret x = interpretStart x [Map.empty]
 
---Starting point after gettign a global scope
+--Starting point after getting a global scope
 interpretStart :: Program -> [Map.Map String (String, String)] -> String
 interpretStart [] m = ""
 interpretStart (x:xs) m = let curr = interpretStatement x m in
@@ -97,8 +99,12 @@ interpretStart (x:xs) m = let curr = interpretStatement x m in
 interpretStatement :: Statement -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)])
 interpretStatement (Write a) m = case a of
     FloatExp e -> let evaluated = evalFloatExp e m in
-        trace ("e is " ++ evaluated) (evaluated ++ "\n", m) 
+        ("writeln: >> " ++ evaluated ++ "\n", m)
+        -- trace ("e is " ++ evaluated) (evaluated ++ "\n", m) 
+        --This is something that you just added to the code 
+    -- BExp e -> let evaluated = evalFloatExp e m in
+    --     trace ("e is " ++ evaluated) (evaluated ++ "\n", m) 
 -- TODO: Add bools
 interpretStatement (Assign a b) maps = case b of
     FloatExp e -> let evaluated = evalFloatExp e maps in
-                   ("", Map.insert a ("Float", evaluated) (head maps) : tail maps)
+                   (a ++ " is assigned to " ++ evaluated ++ "\n", Map.insert a ("Float", evaluated) (head maps) : tail maps)
