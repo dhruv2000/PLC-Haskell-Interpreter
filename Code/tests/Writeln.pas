@@ -5,4 +5,5 @@ begin
     writeln(dd)
     b := a + dd
     writeln(b + dd)
+    f := 5.0
 end

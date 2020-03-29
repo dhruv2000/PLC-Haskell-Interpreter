@@ -45,7 +45,7 @@ main = hspec $ do
 
 -- TODO later add more test cases to this test case as whole bc there are a lot of possibilites
   describe "intExp" $ do
-        context "Floats" $ do
+    context "Floats" $ do
         it "7.0" $ do
             intExp (Real 7.0) `shouldBe` 7.0
     context "Negation" $ do

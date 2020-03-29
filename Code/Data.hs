@@ -37,6 +37,7 @@ data BoolExp =
     -- true and false constants
     | True_C
     | False_C
+    -- DOBRA didnt add that
     | Var_B String
 
 -- bool Exp gone

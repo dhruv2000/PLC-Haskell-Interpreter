@@ -108,7 +108,7 @@ interpret x = interpretStart x [Map.empty]
 interpretStart :: Program -> [Map.Map String (String, String)] -> String
 interpretStart [] m = ""
 interpretStart (x:xs) m = let curr = interpretStatement x m in
-      (fst curr) ++ (interpretStart xs $ snd curr)
+      (fst curr) ++ (interpretStart xs (snd curr))
 
 -- Variable name, (variable type, variable value being assigned)
 interpretStatement :: Statement -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)])
