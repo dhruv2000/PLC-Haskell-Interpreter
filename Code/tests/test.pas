@@ -1,5 +1,6 @@
 begin
-    d := 6.0
-    a := 7.0
-    6.0 < 7.0
+    d := true
+    e := 7.8 + 7.7
+    b := false
+    f := d AND b
 end

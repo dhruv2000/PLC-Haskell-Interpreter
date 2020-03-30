@@ -4,11 +4,9 @@
 module Data
     (
         Exp(..),
-        BoolExp(..),
         Statement(..),
         VType(..),
         Definition(..),
-        GenExp(..),
         Program
     ) where
 
@@ -25,39 +23,41 @@ data Exp =
     -- real value: e.g. Real 1.0
     | Real Float
     -- I don't think its necessary - but we agree on it
-
--- Data-structure for boolean expressions
-data BoolExp = 
-    -- binary operator on boolean expressions
-    OpB String BoolExp BoolExp
+    | OpB String Exp Exp
     -- negation, the only unary operator
-    | Not BoolExp
+    | Not Exp
     -- comparison operator: Comp name expression expression
     | Comp String Exp Exp
     -- true and false constants
     | True_C
     | False_C
-    -- DOBRA didnt add that
-    | Var_B String
+
+-- -- Data-structure for boolean expressions
+-- data BoolExp = 
+--     -- binary operator on boolean expressions
+   
+--     -- DOBRA didnt add that
+--     | Var_B String
 
 -- bool Exp gone
-data GenExp = FloatExp Exp
+-- data GenExp = Expression Exp
 
 -- Data-structure for statements
 data Statement = 
     -- TODO: add other statements
     -- Variable assignment
-    Assign String GenExp
+    Assign String Exp
     --Writeln
-    | Write GenExp
+    | Write Exp
     -- If statement
-    | If BoolExp [Statement]
+    | If Exp [Statement]
     -- Block
+    --If we get time
     | Block [Statement]
     -- While loop
-    | While BoolExp [Statement]
+    | While Exp [Statement]
     -- For loop
-    | For String GenExp BoolExp [Statement]
+    | For String Exp Exp [Statement]
 
 data VType = REAL | BOOL | STRING;
 
