@@ -42,8 +42,8 @@ tokens :-
   [\+]|[\-]|[\*]|[\/]|[=]|:=            { tok_string     TokenOp }
   [\<]|[\>]|\<=|\>=                     { tok_string     TokenOp }
   [\(]|[\)]|begin|end|true|false|OR     { tok_string     TokenK }
-  [\:]|AND|not|var|boolean|real|string  { tok_string     TokenK }
-  while|do|for|to|writeln               { tok_string     TokenK }
+  [\:]|[\;]|AND|not|var|boolean|real    { tok_string     TokenK }
+  while|do|for|to|writeln|const|string  { tok_string     TokenK }
   [\,]|ID_List|program                  { tok_string     TokenK }
   sqrt|ln|sin|cos                       { tok_string     TokenK }
   $alpha [$alpha $digit \_ \']*         { tok_string   TokenID }

@@ -51,8 +51,10 @@ import Lexer
         'do'            { Token _ (TokenK "do") }
         'var'           { Token _ (TokenK "var") }
         ':'             { Token _ (TokenK ":") }
+        ';'             { Token _ (TokenK ";") }
         'boolean'       { Token _ (TokenK "bool") }
         'real'          { Token _ (TokenK "real") }
+        'const'         { Token _ (TokenK "const") }
         'string'        { Token _ (TokenK "string") }
         ','             { Token _ (TokenK ",") }
         'ID_List'       { Token _ (TokenK "ID_List") }
@@ -78,14 +80,17 @@ Defs :: {[Definition]}
     : { [] } -- nothing; make empty list
     | Definition Defs { $1:$2 } -- put statement as first element of statements
 
+-- Variable Definitions
 Definition :: {Definition}
-    : 'var' ID_List ':' Type { VarDef $2 $4 }  
+-- The first line is temporary
+    : 'var' ID ':' Type { VarDef $2 $4 } 
+    | 'var' ID_List ':' Type { VarDefList $2 $4 }
 
 
 Type :: {VType}
     : 'boolean' { BOOL }
     | 'real' { REAL }
-    | 'string' { STRING }
+    | 'const' { CONST }
 
 ID_List :: {[String]}
     : ID {[$1]}
@@ -124,8 +129,10 @@ Statements :: {[Statement]}
 
 --This needs to be added to
 Statement :: {Statement}
-    : ID ':=' Exp { Assign $1 $3 }
-    | 'writeln' '(' Exp ')' {Write $3}
+    : ID ':=' '(' Exp ')' ';' { Assign $1 $4 }
+    | ID ':=' Exp ';' { Assign $1 $3 }
+    | Definition {SomeDefinition $1}
+    | 'writeln' '(' Exp ')' ';' {Write $3}
     | 'if' '(' Exp ')'  'then' 'begin' Statements  'end' {If $3 $7}
     | 'while' '(' Exp ')' 'do' 'begin' Statements 'end' {While $3 $7}
     | 'for' ID ':=' Exp 'to' Exp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 }

@@ -12,42 +12,32 @@ module Data
 
 -- Data-structure for  numeric expressions
 data Exp = 
-    -- variable: e.g. Var "x"
+    -- variable: e.g. Var "x" - DONE
     Var String
-    -- unary operator: Op name expression
+    -- unary operator: Op name expression - DONE
     | Op1 String Exp
-    -- binary operator: Op name leftExpression rightExpression
+    -- binary operator: Op name leftExpression rightExpression - DONE
     | Op2 String Exp Exp
-    -- function call: FunctionCall name ListArguments
-    | FunCall String [Exp]
-    -- real value: e.g. Real 1.0
+    -- real value: e.g. Real 1.0 - DONE
     | Real Float
-    -- I don't think its necessary - but we agree on it
+    -- I don't think its necessary - but we agree on it - DONE
     | OpB String Exp Exp
-    -- negation, the only unary operator
+    -- negation, the only unary operator - DONE
     | Not Exp
-    -- comparison operator: Comp name expression expression
+    -- comparison operator: Comp name expression expression - DONE
     | Comp String Exp Exp
-    -- true and false constants
+    -- true and false constants - DONE
     | True_C
     | False_C
+    -- *********************TODO*************************
+    -- function call: FunctionCall name ListArguments
+    | FunCall String [Exp]
 
--- -- Data-structure for boolean expressions
--- data BoolExp = 
---     -- binary operator on boolean expressions
-   
---     -- DOBRA didnt add that
---     | Var_B String
-
--- bool Exp gone
--- data GenExp = Expression Exp
-
--- Data-structure for statements
 data Statement = 
     -- TODO: add other statements
-    -- Variable assignment
+    -- Variable assignment - DONE
     Assign String Exp
-    --Writeln
+    --Writeln - DONE
     | Write Exp
     -- If statement
     | If Exp [Statement]
@@ -58,12 +48,15 @@ data Statement =
     | While Exp [Statement]
     -- For loop
     | For String Exp Exp [Statement]
+    | SomeDefinition Definition
 
-data VType = REAL | BOOL | STRING;
+data VType = REAL | BOOL | CONST;
 
 data Definition = 
     -- Variable definition, list of var, type
-    VarDef [String] VType
+    VarDef String VType
+    -- Variable definition, list of var, type
+    | VarDefList [String] VType
     -- Procedures
     | Proc String [(String, VType)] Statement
  
