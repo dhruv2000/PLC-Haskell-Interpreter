@@ -48,16 +48,16 @@ data Statement =
     | While Exp [Statement]
     -- For loop
     | For String Exp Exp [Statement]
-    | SomeDefinition Definition
+    | VariableDefinition Definition
 
-data VType = REAL | BOOL | CONST;
+data VType = BOOL | REAL | CONST;
 
 data Definition = 
     -- Variable definition, list of var, type
     VarDef String VType
     -- Variable definition, list of var, type
     | VarDefList [String] VType
-    -- Procedures
+    -- Procedures - FOR LATER PUT INTO DIFFERENT THING LATER ***********************
     | Proc String [(String, VType)] Statement
  
 -- Data-structure for hole program

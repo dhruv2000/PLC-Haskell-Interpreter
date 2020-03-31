@@ -8,7 +8,8 @@ module Interpret
     bibOp2,
     relBiOp,
     expression,
-
+    evalDefinition,
+    evalExpression,
 )
 where
 
@@ -92,11 +93,19 @@ interpretStatement (Assign a b) maps =
             Left real -> (a ++ " is assigned REAL to " ++ real ++ "\n", Map.insert a ("real", real) (head maps) : tail maps)
             Right bool -> (a ++ " is assigned BOOL to " ++ bool ++ "\n", Map.insert a ("boolean", bool) (head maps) : tail maps)
 
+-- This should cover variable defintion
+interpretStatement (VariableDefinition d) m = evalDefinition d m
 
--- Variable name, (variable type, variable value being assigned)
--- Need to do them for add subtrac, etc
+-- This evaluates definitions of variables
+evalDefinition :: Definition -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)])
+evalDefinition (VarDef s t) maps = 
+        case t of
+            BOOL -> (s ++ " is assigned BOOL to NOTHING\n", Map.insert s ("boolean", "") (head maps) : tail maps)
+            REAL -> (s ++ " is assigned REAL to NOTHING\n", Map.insert s ("real", "") (head maps) : tail maps)
 
---This returns a float or a bool depending on the passed in thing
+--TODO-- var temp : real = 5.0, and for booleans
+--TODO -- var ID_LIST : real; and for booleans
+
 
 -- This either statement is two strings that represent real and boolean
 evalExpression :: Exp -> [Map.Map String (String, String)] -> Either String String

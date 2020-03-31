@@ -52,7 +52,7 @@ import Lexer
         'var'           { Token _ (TokenK "var") }
         ':'             { Token _ (TokenK ":") }
         ';'             { Token _ (TokenK ";") }
-        'boolean'       { Token _ (TokenK "bool") }
+        'boolean'       { Token _ (TokenK "boolean") }
         'real'          { Token _ (TokenK "real") }
         'const'         { Token _ (TokenK "const") }
         'string'        { Token _ (TokenK "string") }
@@ -83,8 +83,8 @@ Defs :: {[Definition]}
 -- Variable Definitions
 Definition :: {Definition}
 -- The first line is temporary
-    : 'var' ID ':' Type { VarDef $2 $4 } 
-    | 'var' ID_List ':' Type { VarDefList $2 $4 }
+    : 'var' ID ':' Type ';' { VarDef $2 $4 } 
+    | 'var' ID_List ':' Type ';' { VarDefList $2 $4 }
 
 
 Type :: {VType}
@@ -112,7 +112,7 @@ Exp :: {Exp}
     | '(' Exp ')' { $2 } -- ignore brackets
     | ID { Var $1 }
     | float { Real $1 }
-    |'true' { True_C }
+    | 'true' { True_C }
     | 'false' { False_C }
     | 'not' Exp { Not $2 }
     | Exp '<' Exp { Comp "<" $1 $3 }
@@ -129,9 +129,9 @@ Statements :: {[Statement]}
 
 --This needs to be added to
 Statement :: {Statement}
-    : ID ':=' '(' Exp ')' ';' { Assign $1 $4 }
+    : Definition {VariableDefinition $1}
+    | ID ':=' '(' Exp ')' ';' { Assign $1 $4 }
     | ID ':=' Exp ';' { Assign $1 $3 }
-    | Definition {SomeDefinition $1}
     | 'writeln' '(' Exp ')' ';' {Write $3}
     | 'if' '(' Exp ')'  'then' 'begin' Statements  'end' {If $3 $7}
     | 'while' '(' Exp ')' 'do' 'begin' Statements 'end' {While $3 $7}
