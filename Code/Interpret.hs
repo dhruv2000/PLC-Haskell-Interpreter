@@ -98,8 +98,11 @@ interpretStatement (If a b) maps =
     let evaluated = evalExpression a maps in
         case evaluated of
             Right bool -> 
-                case bool of ->
-                    True -> let restEval = interpretStatement (b:bs)
+                case bool of
+                    "True" -> let restEval = interpretStart b maps in 
+                        (restEval, maps)
+                    -- Else statement
+                    "False" ->("", (head maps) : tail maps)
             
 
 

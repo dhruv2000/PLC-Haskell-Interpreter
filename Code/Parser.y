@@ -101,6 +101,9 @@ ID_List :: {[String]}
 -- Expressions
 Exp :: {Exp}
     : '+' Exp { $2 } -- ignore Plus
+    | float { Real $1 }
+    | 'true' { True_C }
+    | 'false' { False_C }
     | '-' Exp { Op1 "-" $2}
     | 'sqrt' Exp  { Op1 "sqrt" $2 }
     | 'ln' Exp  { Op1 "ln" $2 }
@@ -113,9 +116,6 @@ Exp :: {Exp}
     | Exp '*' Exp { Op2 "*" $1 $3 }
     | '(' Exp ')' { $2 } -- ignore brackets
     | ID { Var $1 }
-    | float { Real $1 }
-    | 'true' { True_C }
-    | 'false' { False_C }
     | 'not' Exp { Not $2 }
     | Exp '<' Exp { Comp "<" $1 $3 }
     | Exp '>' Exp { Comp ">" $1 $3 }
@@ -134,8 +134,9 @@ Statement :: {Statement}
     : Definition {VariableDefinition $1}
     | ID ':=' '(' Exp ')' ';' { Assign $1 $4 }
     | ID ':=' Exp ';' { Assign $1 $3 }
+    | 'if' '(' Exp ')' {Write $3}
     | 'writeln' '(' Exp ')' ';' {Write $3}
-    | 'if' '(' Exp ')'  'then' 'begin' Statements  'end' {If $3 $7}
+    | 'if' '(' Exp ')' 'then' 'begin' Statements 'end' {If $3 $7}
     | 'while' '(' Exp ')' 'do' 'begin' Statements 'end' {While $3 $7}
     | 'for' ID ':=' Exp 'to' Exp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 }
 {}

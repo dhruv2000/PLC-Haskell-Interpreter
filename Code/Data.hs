@@ -33,6 +33,7 @@ data Exp =
     -- function call: FunctionCall name ListArguments
     -- (String ,[Exp]) tuple
     | FunCall String [Exp]
+    deriving (Show)
 
 data Statement = 
     -- TODO: add other statements
@@ -50,8 +51,13 @@ data Statement =
     -- For loop
     | For String Exp Exp [Statement]
     | VariableDefinition Definition
+    deriving (Show)
 
-data VType = BOOL | REAL | CONST;
+data VType = 
+    BOOL 
+    | REAL
+    | CONST
+    deriving (Show)
 
 data Definition = 
     -- Variable definition, list of var, type
@@ -64,9 +70,10 @@ data Definition =
     | VarDefList2 [String] VType Exp
     -- Procedures - FOR LATER PUT INTO DIFFERENT THING LATER ***********************
     | Proc String [(String, VType)] Statement
- 
+    deriving (Show)
 -- Data-structure for whole program
 -- TODO: add declarations and other useful stuff
 -- Hint: make a tuple containing the other ingredients
-type Program = [Statement]
+type Program = [Statement] 
+
 
