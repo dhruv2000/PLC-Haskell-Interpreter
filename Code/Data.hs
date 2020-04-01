@@ -42,14 +42,14 @@ data Statement =
     --Writeln - DONE
     | Write Exp
     -- If statement
-    | If Exp [Statement]
+    | If Exp Statement (Maybe Statement) -- Nothing or (Just value)
     -- Block
     --If we get time
     | Block [Statement]
     -- While loop
-    | While Exp [Statement]
+    | While Exp Statement
     -- For loop
-    | For String Exp Exp [Statement]
+    | For String Exp Exp Statement
     | VariableDefinition Definition
     deriving (Show)
 

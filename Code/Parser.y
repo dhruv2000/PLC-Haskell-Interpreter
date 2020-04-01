@@ -77,6 +77,7 @@ import Lexer
 Program :: {Program}
     : Defs 'begin' Statements 'end' { $3 }
 
+
 Defs :: {[Definition]}
     : { [] } -- nothing; make empty list
     | Definition Defs { $1:$2 } -- put statement as first element of statements
@@ -125,19 +126,22 @@ Exp :: {Exp}
     | Exp 'AND' Exp { OpB "AND" $1 $3 }
     | Exp 'OR' Exp { OpB "OR" $1 $3 }
 
+Block :: {[Statement]}
+    : 'begin' Statements 'end' { $2 }
 
 Statements :: {[Statement]}
-    : {  } -- nothing; make empty list
+    : { [] } -- nothing; make empty list
     | Statement Statements { $1:$2 } -- put statement as first element of statements
 
 --This needs to be added to
 Statement :: {Statement}
     : Definition {VariableDefinition $1}
     | ID ':=' '(' Exp ')' ';' { Assign $1 $4 }
-    | ID ':=' Exp ';' { Assign $1 $3 }
+    | ID ':=' Exp ';' { Assign $1 $3 } 
     | 'writeln' '(' Exp ')' ';' {Write $3}
-    | 'if' '(' Exp ')' 'then' 'begin' Statements 'end' {If $3 $7}
-    | 'var' Statement Statement {Dumb $2 $3}
-    | 'while' '(' Exp ')' 'do' 'begin' Statements 'end' {While $3 $7}
-    | 'for' ID ':=' Exp 'to' Exp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 }
+    | 'if' '(' Exp ')' 'then' Statement {If $3 $6 Nothing}
+    | 'if' '(' Exp ')' 'then' Statement 'else' Statement {If $3 $6 (Just $8)}
+    | Block {Block $1}
+    | 'while' '(' Exp ')' 'do' Statement {While $3 $6}
+    | 'for' ID ':=' Exp 'to' Exp 'do' Statement {For $2 $4 $6 $8 }
 {}
