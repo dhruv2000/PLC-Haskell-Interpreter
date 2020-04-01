@@ -165,7 +165,7 @@ evalExpression (Var s) [m] = let f = (Map.lookup s m) in
                                     case (fst f) of 
                                         "real" -> Left (snd f);
                                         "boolean" -> Right (snd f);
-                                Nothing ->  error("Variable " ++ s ++ " is undefined");
+                                Nothing ->  error("Variable " ++ s ++ " is undefined\n\n");
 evalExpression (Var s) m = let f =  (Map.lookup s (head m)) in
                                 case f of
                                 Just f -> 
@@ -213,7 +213,7 @@ evalVarExp s [m] = let f = (Map.lookup s m) in
                                                 "True" -> Right True;
                                                 "False" -> Right False;
                                                 --This is where WHILE MESSES UP
-                                Nothing -> error ("Var: " ++ s ++ " is not in the map")
+                                Nothing -> error ("Var: " ++ s ++ " is not in the map\n\n")
 evalVarExp s m = let f = (Map.lookup s (head m)) in
     --------------------( type  ,  value )------------------------------
     -- f is the element ( String, String )
