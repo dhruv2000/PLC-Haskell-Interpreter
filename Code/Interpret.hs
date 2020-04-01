@@ -66,54 +66,68 @@ relBiOp "=" b1 b2 = b1 == b2
 
 
 
+
 interpret :: Program -> String;
 -- Initiates interpreting with an empty global scope
 interpret [] = "";
-interpret x = interpretStart x [Map.empty]
+interpret x = fst (interpretStart x [Map.empty])
 
 --Starting point after getting a global scope
-interpretStart :: Program -> [Map.Map String (String, String)] -> String
-interpretStart [] m = ""
-interpretStart (x:xs) m = let curr = interpretStatement x m in
-      (fst curr) ++ (interpretStart xs (snd curr))
+interpretStart :: Program -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)])
+interpretStart [] m = ("", [Map.empty])
+interpretStart (x:xs) m = let curr = interpretStatement x m
+                              next = interpretStart xs (snd curr) in
+      ((fst curr) ++ (fst next), (snd next))
 
 -- Variable name, (variable type, variable value being assigned)
 interpretStatement :: Statement -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)])
-interpretStatement (Write a) m = 
+interpretStatement (Write a) m =
     let evaluated = evalExpression a m in
-        case evaluated of 
+        case evaluated of
             Left real -> ("writeln: >> " ++ real ++ "\n", m)
-            Right bool -> ("writeln: >> " ++ bool ++ "\n", m)   
-        
+            Right bool -> ("writeln: >> " ++ bool ++ "\n", m)
+
         -- trace ("e is " ++ evaluated) (evaluated ++ "\n", m) 
 
-interpretStatement (Assign a b) maps = 
+interpretStatement (Assign a b) maps =
     let evaluated = evalExpression b maps in
         case evaluated of
             Left real -> (a ++ " is assigned REAL to " ++ real ++ "\n", Map.insert a ("real", real) (head maps) : tail maps)
             Right bool -> (a ++ " is assigned BOOL to " ++ bool ++ "\n", Map.insert a ("boolean", bool) (head maps) : tail maps)
 
 
-interpretStatement (If a b) maps = 
-    let evaluated = expression a maps in
-        case evaluated of
-            Right bool -> 
-                case bool of
-                    True -> let restEval = interpretStart b maps in 
-                        (restEval, maps)
+--interpretStatement (If a b) maps = 
+  --  let evaluated = expression a maps in
+ --       case evaluated of
+--            Right bool -> 
+                --case bool of
+                    --True -> let restEval = interpretStart b maps in 
+                        --(restEval, maps)
                     -- Else statement
                     -- "False" -> let restEval = interpretStart c maps in 
                     --     (restEval, maps)
-            
+
 interpretStatement (While a b) maps =
         let evaluated = expression a maps in
             case evaluated of
                 Right bool ->
                     case bool of
-                        True -> let restEval = trace("Dhruv1") interpretStatement (b:tail) maps in 
-                            restEval
+                        True -> let restEval = interpretStart b maps
+                                    nextEval = interpretStatement (While a b) (snd restEval) in
+                            ((fst restEval) ++ (fst nextEval), maps)
                         False -> trace("Dhruv2") ("sdfjk", maps)
                 Left real -> trace("Dhruv3") ("asdjfk", maps)
+
+            
+-- interpretStatement (While a b) maps =
+--         let evaluated = expression a maps in
+--             case evaluated of
+--                 Right bool ->
+--                     case bool of
+--                         True -> let restEval = trace("Dhruv1") interpretStatement (b:tail) maps in 
+--                             restEval
+--                         False -> trace("Dhruv2") ("sdfjk", maps)
+--                 Left real -> trace("Dhruv3") ("asdjfk", maps)
 
 -- This should cover variable defintion
 interpretStatement (VariableDefinition d) m = evalDefinition d m
@@ -195,7 +209,19 @@ expression (Var s) m = let evaluated = evalVarExp s m in
 
 -- This traverses the map and looks for the passed in string name 
 evalVarExp :: String -> [Map.Map String (String, String)] -> Either Float Bool
-evalVarExp s m = let f =  (Map.lookup s (head m)) in
+evalVarExp s [m] = let f =  (Map.lookup s m) in
+                            case f of
+                                Just f -> 
+                                    case (fst f) of 
+                                        --read takes the string and makes it a float
+                                        "real" ->  Left (read (snd f));
+                                        "boolean" -> 
+                                            case (snd f) of
+                                                "True" -> Right True;
+                                                "False" -> Right False;
+                                                --This is where WHILE MESSES UP
+                                Nothing -> error ("Not in the map")
+evalVarExp s m = let f =  (trace "Dhruv1") (Map.lookup s (head m)) in
     --------------------( type  ,  value )------------------------------
     -- f is the element ( String, String )
                                 case f of
@@ -208,4 +234,4 @@ evalVarExp s m = let f =  (Map.lookup s (head m)) in
                                                 "True" -> Right True;
                                                 "False" -> Right False;
                                                 --This is where WHILE MESSES UP
-                                Nothing -> evalVarExp s (tail m);
+                                Nothing -> (trace "Dhruv") evalVarExp s (tail m);
