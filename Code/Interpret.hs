@@ -58,7 +58,7 @@ bibOp2 "OR" b1 b2 = b1 || b2
 
 -- relational binary operator( takes in 2 values)
 relBiOp :: String -> Float -> Float -> Bool
-relBiOp "<" b1 b2 = b1 < b2
+relBiOp "<" b1 b2 =  (b1 < b2)
 relBiOp ">" b1 b2 = b1 > b2
 relBiOp "<=" b1 b2 = b1 <= b2
 relBiOp ">=" b1 b2 = b1 >= b2
@@ -95,18 +95,25 @@ interpretStatement (Assign a b) maps =
 
 
 interpretStatement (If a b) maps = 
-    let evaluated = evalExpression a maps in
+    let evaluated = expression a maps in
         case evaluated of
             Right bool -> 
                 case bool of
-                    "True" -> let restEval = interpretStart b maps in 
+                    True -> let restEval = interpretStart b maps in 
                         (restEval, maps)
                     -- Else statement
                     -- "False" -> let restEval = interpretStart c maps in 
                     --     (restEval, maps)
             
-
-
+interpretStatement (While a b) maps =
+        let evaluated = expression a maps in
+            case evaluated of
+                Right bool ->
+                    case bool of
+                        True -> let restEval = trace("Dhruv1") interpretStatement (b:tail) maps in 
+                            restEval
+                        False -> trace("Dhruv2") ("sdfjk", maps)
+                Left real -> trace("Dhruv3") ("asdjfk", maps)
 
 -- This should cover variable defintion
 interpretStatement (VariableDefinition d) m = evalDefinition d m
@@ -179,7 +186,7 @@ expression False_C m = Right False
 --boolean Expressions
 expression (Not e1) m = Right (bibOp1 "NOT" (fromRight True (expression e1 m)))
 expression (OpB op v1 v2) m = Right (bibOp2 op (fromRight True (expression v1 m)) (fromRight True (expression v2 m)))
-expression (Comp op e1 e2) m = Right (relBiOp op (fromLeft 500.6969 (expression e1 m)) (fromLeft 500.6969 (expression e2 m)))
+expression (Comp op e1 e2) m =  Right (relBiOp op (fromLeft 500.6969 (expression e1 m)) (fromLeft 500.6969 (expression e2 m)))
 expression (Var s) m = let evaluated = evalVarExp s m in
         case evaluated of 
             Left real -> Left real
@@ -195,9 +202,10 @@ evalVarExp s m = let f =  (Map.lookup s (head m)) in
                                 Just f -> 
                                     case (fst f) of 
                                         --read takes the string and makes it a float
-                                        "real" -> Left (read (snd f));
+                                        "real" ->  Left (read (snd f));
                                         "boolean" -> 
                                             case (snd f) of
                                                 "True" -> Right True;
                                                 "False" -> Right False;
+                                                --This is where WHILE MESSES UP
                                 Nothing -> evalVarExp s (tail m);

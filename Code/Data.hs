@@ -42,7 +42,7 @@ data Statement =
     --Writeln - DONE
     | Write Exp
     -- If statement
-    | If Exp [Statement] [Statement]
+    | If Exp [Statement]
     -- Block
     --If we get time
     | Block [Statement]

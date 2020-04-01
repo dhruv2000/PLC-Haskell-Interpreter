@@ -127,7 +127,7 @@ Exp :: {Exp}
 
 
 Statements :: {[Statement]}
-    : { [] } -- nothing; make empty list
+    : {  } -- nothing; make empty list
     | Statement Statements { $1:$2 } -- put statement as first element of statements
 
 --This needs to be added to
@@ -136,7 +136,8 @@ Statement :: {Statement}
     | ID ':=' '(' Exp ')' ';' { Assign $1 $4 }
     | ID ':=' Exp ';' { Assign $1 $3 }
     | 'writeln' '(' Exp ')' ';' {Write $3}
-    | 'if' '(' Exp ')' 'then' 'begin' Statements 'end' Statements {If $3 $7 $9}
+    | 'if' '(' Exp ')' 'then' 'begin' Statements 'end' {If $3 $7}
+    | 'var' Statement Statement {Dumb $2 $3}
     | 'while' '(' Exp ')' 'do' 'begin' Statements 'end' {While $3 $7}
     | 'for' ID ':=' Exp 'to' Exp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 }
 {}
