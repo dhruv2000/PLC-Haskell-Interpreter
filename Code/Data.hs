@@ -31,6 +31,7 @@ data Exp =
     | False_C
     -- *********************TODO*************************
     -- function call: FunctionCall name ListArguments
+    -- (String ,[Exp]) tuple
     | FunCall String [Exp]
 
 data Statement = 
@@ -54,13 +55,17 @@ data VType = BOOL | REAL | CONST;
 
 data Definition = 
     -- Variable definition, list of var, type
-    VarDef String VType
+    VarDef1 String VType
     -- Variable definition, list of var, type
-    | VarDefList [String] VType
+    | VarDef2 String VType Exp
+    -- Variable definition, list of var, type
+    | VarDefList1 [String] VType
+    -- Variable definition, list of var, type
+    | VarDefList2 [String] VType Exp
     -- Procedures - FOR LATER PUT INTO DIFFERENT THING LATER ***********************
     | Proc String [(String, VType)] Statement
  
--- Data-structure for hole program
+-- Data-structure for whole program
 -- TODO: add declarations and other useful stuff
 -- Hint: make a tuple containing the other ingredients
 type Program = [Statement]

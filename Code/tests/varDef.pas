@@ -1,4 +1,4 @@
 begin 
-    var temp : real;
-    var temp2 : boolean;
+    var temp : real := 5.0;
+    var temp2 : boolean := true;
 end

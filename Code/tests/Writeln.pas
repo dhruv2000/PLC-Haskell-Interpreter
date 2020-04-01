@@ -6,5 +6,5 @@ begin
     b := a + dd;
     writeln(b + dd);
     f := 5.0;
-    c := 6.0 < 7.0;
+    var c : boolean := 6.0 < 7.0;
 end

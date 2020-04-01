@@ -83,8 +83,10 @@ Defs :: {[Definition]}
 -- Variable Definitions
 Definition :: {Definition}
 -- The first line is temporary
-    : 'var' ID ':' Type ';' { VarDef $2 $4 } 
-    | 'var' ID_List ':' Type ';' { VarDefList $2 $4 }
+    : 'var' ID ':' Type ';' { VarDef1 $2 $4 } 
+    | 'var' ID ':' Type ':=' Exp ';' { VarDef2 $2 $4 $6 } 
+    | 'var' ID_List ':' Type ';' { VarDefList1 $2 $4 }
+    | 'var' ID_List ':' Type ':=' Exp ';' { VarDefList2 $2 $4 $6 }
 
 
 Type :: {VType}

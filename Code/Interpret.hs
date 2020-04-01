@@ -8,7 +8,7 @@ module Interpret
     bibOp2,
     relBiOp,
     expression,
-    evalDefinition,
+    -- evalDefinition,
     evalExpression,
 )
 where
@@ -93,18 +93,49 @@ interpretStatement (Assign a b) maps =
             Left real -> (a ++ " is assigned REAL to " ++ real ++ "\n", Map.insert a ("real", real) (head maps) : tail maps)
             Right bool -> (a ++ " is assigned BOOL to " ++ bool ++ "\n", Map.insert a ("boolean", bool) (head maps) : tail maps)
 
+
+interpretStatement (If a b) maps = 
+    let evaluated = evalExpression a maps in
+        case evaluated of
+            Right bool -> 
+                case bool of ->
+                    True -> let restEval = interpretStatement (b:bs)
+            
+
+
+
 -- This should cover variable defintion
 interpretStatement (VariableDefinition d) m = evalDefinition d m
 
 -- This evaluates definitions of variables
 evalDefinition :: Definition -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)])
-evalDefinition (VarDef s t) maps = 
+evalDefinition (VarDef1 s t) maps = 
         case t of
             BOOL -> (s ++ " is assigned BOOL to NOTHING\n", Map.insert s ("boolean", "") (head maps) : tail maps)
             REAL -> (s ++ " is assigned REAL to NOTHING\n", Map.insert s ("real", "") (head maps) : tail maps)
 
---TODO-- var temp : real = 5.0, and for booleans
+evalDefinition (VarDef2 s t e) maps = 
+        let evaluated = evalExpression e maps in
+        case evaluated of
+            Left real -> (s ++ " is assigned REAL to " ++ real ++ "\n", Map.insert s ("real", real) (head maps) : tail maps)
+            Right bool -> (s ++ " is assigned BOOL to " ++ bool ++ "\n", Map.insert s ("boolean", bool) (head maps) : tail maps)
+
+    -- ((evalTraversal sList), (head maps) : tail maps)
+-- case evaluated of
+        --     Left real -> forM_ sList $ \s -> do
+        --                     forM_ s -> (Map.insert s ("real", real) (head maps) : tail maps)
+            --Right bool -> (s ++ " is assigned BOOL to " ++ bool ++ "\n", Map.insert s ("boolean", bool) (head maps) : tail maps)
+
+--evalList :: [String] -> [Map.Map String (String, String)] -> [Map.Map String (String, String)]
+
+
+-- evalTraversal :: [String] -> String
+-- evalTraversal [] = ""
+-- evalTraversal (x:xs) = x ++ ", " ++ (evalTraversal xs)
+
 --TODO -- var ID_LIST : real; and for booleans
+--TODO - either move on to other things, or quicckly write unit tests for the var definitions
+--TODO -- figure out Const
 
 
 -- This either statement is two strings that represent real and boolean
