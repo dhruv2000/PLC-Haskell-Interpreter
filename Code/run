@@ -1,0 +1,2 @@
+cabal run ./tests/ifStatement.pas 
+cabal run ./tests/forLoop.pas

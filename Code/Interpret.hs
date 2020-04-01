@@ -113,7 +113,7 @@ interpretStatement (While a b) maps =
                         True -> let (output, newMap) = interpretStatement b maps
                                     (newOutput, newNewMap) = interpretStatement (While a b) newMap in
                                         (output ++ newOutput, maps)
-                        False -> ("empty", maps)
+                        False -> ("empty\n", maps)
                 Left real -> ("not bool", maps)
 
 interpretStatement (Block a) maps = interpretStart a maps;
