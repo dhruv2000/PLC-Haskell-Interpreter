@@ -112,7 +112,7 @@ interpretStatement (While a b) maps =
                     case bool of
                         True -> let (output, newMap) = interpretStatement b maps
                                     (newOutput, newNewMap) = interpretStatement (While a b) newMap in
-                                        (output ++ newOutput, newNewMap)
+                                        (output ++ newOutput, maps)
                         False -> ("empty", maps)
                 Left real -> ("not bool", maps)
 
