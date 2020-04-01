@@ -102,7 +102,8 @@ interpretStatement (If a b) maps =
                     "True" -> let restEval = interpretStart b maps in 
                         (restEval, maps)
                     -- Else statement
-                    "False" ->("", (head maps) : tail maps)
+                    -- "False" -> let restEval = interpretStart c maps in 
+                    --     (restEval, maps)
             
 
 

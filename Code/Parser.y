@@ -62,6 +62,7 @@ import Lexer
         'writeln'       { Token _ (TokenK "writeln") }
         'if'            { Token _ (TokenK "if")      }
         'then'          { Token _ (TokenK "then")    }
+        'else'          { Token _ (TokenK "else")    }
 
 
 -- associativity of operators in reverse precedence order
@@ -134,9 +135,8 @@ Statement :: {Statement}
     : Definition {VariableDefinition $1}
     | ID ':=' '(' Exp ')' ';' { Assign $1 $4 }
     | ID ':=' Exp ';' { Assign $1 $3 }
-    | 'if' '(' Exp ')' {Write $3}
     | 'writeln' '(' Exp ')' ';' {Write $3}
-    | 'if' '(' Exp ')' 'then' 'begin' Statements 'end' {If $3 $7}
+    | 'if' '(' Exp ')' 'then' 'begin' Statements 'end' Statements {If $3 $7 $9}
     | 'while' '(' Exp ')' 'do' 'begin' Statements 'end' {While $3 $7}
     | 'for' ID ':=' Exp 'to' Exp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 }
 {}
