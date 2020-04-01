@@ -118,6 +118,10 @@ interpretStatement (While a b) maps =
 
 interpretStatement (Block a) maps = interpretStart a maps;
 
+
+interpretStatement (For a b c d) maps = let (output, newMap) = interpretStatement (Assign a b) maps
+                                            (output2, newNewMap) = interpretStatement (While (Comp "<"(Var a) c) (Block (d : [(Assign a (Op2 "+" (Var a) (Real 1.0)))]))) newMap in
+                                                (output ++ output2, maps)
 -- This should cover variable defintion
 interpretStatement (VariableDefinition d) m = evalDefinition d m
 
