@@ -1,9 +1,0 @@
-./dist/build/Pascal/Pascal tests/varDeclarationTest.pas
-./dist/build/Pascal/Pascal tests/varDefintionTest.pas
-./dist/build/Pascal/Pascal tests/realAndBoolTest.pas
-./dist/build/Pascal/Pascal tests/addTest.pas
-./dist/build/Pascal/Pascal tests/ifStatement.pas
-./dist/build/Pascal/Pascal tests/whileLoop.pas
-./dist/build/Pascal/Pascal tests/forLoop.pas
-./dist/build/Pascal/Pascal tests/writeln.pas
-

@@ -4,4 +4,4 @@ begin
     var e : real := c + 7.7;
     var b : boolean := false;
     var f : boolean := d AND b;
-end
+end.

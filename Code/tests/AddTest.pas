@@ -8,4 +8,4 @@ begin
     val1 := val1 + 1.0;
     result := val1 + val2;
     writeln(result);
-end
+end.

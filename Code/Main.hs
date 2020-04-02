@@ -2,7 +2,7 @@ module Main where
 
 import Pascal
 import System.Environment
-import Debug.Trace(trace)
+--import Debug.Trace(trace)
 
 main :: IO ()
 main = do
@@ -10,5 +10,5 @@ main = do
     contents <- readFile fileName
     case parseString contents of 
         Left err -> print $ show err
-        Right ast -> trace ("ast: " ++ (show ast)) putStrLn ("\n" ++ (interpret ast) ++ "\n--------------------------------------------------------\n")
-
+        Right ast -> putStrLn ("\n" ++ (interpret ast) ++ "\n--------------------------------------------------------\n")
+-- trace ("ast: " ++ (show ast))

@@ -138,7 +138,7 @@ Statements :: {[Statement]}
 Statement :: {Statement}
     : Definition {VariableDefinition $1}
     | ID ':=' '(' Exp ')' ';' { Assign $1 $4 }
-    | ID ':=' Exp ';' { Assign $1 $3 } 
+    | ID ':=' Exp ';' { Assign $1 $3 }
     | 'writeln' '(' Exp ')' ';' {Write $3}
     | 'if' '(' Exp ')' 'then' Statement {If $3 $6 Nothing}
     | 'if' '(' Exp ')' 'then' Statement 'else' Statement {If $3 $6 (Just $8)}
