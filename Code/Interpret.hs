@@ -8,7 +8,7 @@ module Interpret
     bibOp2,
     relBiOp,
     expression,
-    -- evalDefinition,
+    evalDefinition,
     evalExpression,
 )
 where
@@ -82,18 +82,22 @@ interpretStart (x:xs) m = let curr = interpretStatement x m
 
 -- Variable name, (variable type, variable value being assigned)
 interpretStatement :: Statement -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)])
+
+-- Write Statement
 interpretStatement (Write a) m =
     let evaluated = evalExpression a m in
         case evaluated of
             Left real -> ("writeln: >> " ++ real ++ "\n", m)
             Right bool -> ("writeln: >> " ++ bool ++ "\n", m)
 
+-- Assign Statement
 interpretStatement (Assign a b) maps =
     let evaluated = evalExpression b maps in
         case evaluated of
             Left real -> (a ++ " is assigned REAL to " ++ real ++ "\n", [Map.insert a ("real", real) (head maps)])
             Right bool -> (a ++ " is assigned BOOL to " ++ bool ++ "\n", Map.insert a ("boolean", bool) (head maps) : tail maps)
 
+-- If Statement
 interpretStatement (If a b c) maps = 
    let evaluated = expression a maps in
        case evaluated of
@@ -105,6 +109,7 @@ interpretStatement (If a b c) maps =
                         Nothing -> ("", (maps))
                         Just d -> interpretStatement d maps
 
+-- While Loop
 interpretStatement (While a b) maps = 
         let evaluated = (expression a maps) in
             case evaluated of
@@ -116,9 +121,10 @@ interpretStatement (While a b) maps =
                         False -> ("empty\n", maps)
                 Left real -> ("not bool", maps)
 
+-- Blocks 
 interpretStatement (Block a) maps = interpretStart a maps;
 
-
+-- For Loop
 interpretStatement (For a b c d) maps = let (output, newMap) = interpretStatement (Assign a b) maps
                                             (output2, newNewMap) = interpretStatement (While (Comp "<"(Var a) c) (Block (d : [(Assign a (Op2 "+" (Var a) (Real 1.0)))]))) newMap in
                                                 (output ++ output2, maps)
@@ -130,30 +136,13 @@ evalDefinition :: Definition -> [Map.Map String (String, String)] -> (String, [M
 evalDefinition (VarDef1 s t) maps = 
         case t of
             BOOL -> (s ++ " is assigned BOOL to NOTHING\n", Map.insert s ("boolean", "") (head maps) : tail maps)
-            REAL -> (s ++ " is assigned REAL to NOTHING\n", Map.insert s ("real", "") (head maps) : tail maps)
+            REAL -> (s ++ " is assigned REAL to NOTHING\n", Map.insert s ("real", "") (head maps) : tail maps)            
 
 evalDefinition (VarDef2 s t e) maps = 
         let evaluated = evalExpression e maps in
         case evaluated of
             Left real -> (s ++ " is assigned REAL to " ++ real ++ "\n", Map.insert s ("real", real) (head maps) : tail maps)
             Right bool -> (s ++ " is assigned BOOL to " ++ bool ++ "\n", Map.insert s ("boolean", bool) (head maps) : tail maps)
-
-    -- ((evalTraversal sList), (head maps) : tail maps)
--- case evaluated of
-        --     Left real -> forM_ sList $ \s -> do
-        --                     forM_ s -> (Map.insert s ("real", real) (head maps) : tail maps)
-            --Right bool -> (s ++ " is assigned BOOL to " ++ bool ++ "\n", Map.insert s ("boolean", bool) (head maps) : tail maps)
-
---evalList :: [String] -> [Map.Map String (String, String)] -> [Map.Map String (String, String)]
-
-
--- evalTraversal :: [String] -> String
--- evalTraversal [] = ""
--- evalTraversal (x:xs) = x ++ ", " ++ (evalTraversal xs)
-
---TODO -- var ID_LIST : real; and for booleans
---TODO - either move on to other things, or quicckly write unit tests for the var definitions
---TODO -- figure out Const
 
 
 -- This either statement is two strings that represent real and boolean
@@ -166,7 +155,7 @@ evalExpression (Var s) [m] = let f = (Map.lookup s m) in
                                         "real" -> Left (snd f);
                                         "boolean" -> Right (snd f);
                                 Nothing ->  error("Variable " ++ s ++ " is undefined\n\n");
-evalExpression (Var s) m = let f =  (Map.lookup s (head m)) in
+evalExpression (Var s) m = let f = (Map.lookup s (head m)) in
                                 case f of
                                 Just f -> 
                                     case (fst f) of 
@@ -214,7 +203,6 @@ evalVarExp s [m] = let f = (Map.lookup s m) in
                                             case (snd f) of
                                                 "True" -> Right True;
                                                 "False" -> Right False;
-                                                --This is where WHILE MESSES UP
                                 Nothing -> error ("Var: " ++ s ++ " is not in the map\n\n")
 evalVarExp s m = let f = (Map.lookup s (head m)) in
     --------------------( type  ,  value )------------------------------
@@ -228,5 +216,4 @@ evalVarExp s m = let f = (Map.lookup s (head m)) in
                                             case (snd f) of
                                                 "True" -> Right True;
                                                 "False" -> Right False;
-                                                --This is where WHILE MESSES UP
                                 Nothing -> evalVarExp s (tail m);
