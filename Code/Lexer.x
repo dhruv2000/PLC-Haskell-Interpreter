@@ -36,17 +36,17 @@ $alpha = [a-zA-Z]               -- alphabetic characters
 
 -- TODO: Map symbols into token types (with or without parameters)
 tokens :-
-  $white+                               ; -- remove multiple white-spaces
-  "//".*                                ; -- skip one line comments
-  $digit+\.$digit*                      { tok_read     TokenFloat }
-  [\+]|[\-]|[\*]|[\/]|[=]|:=            { tok_string     TokenOp }
-  [\<]|[\>]|\<=|\>=                     { tok_string     TokenOp }
-  [\(]|[\)]|begin|end|true|false|OR     { tok_string     TokenK }
-  [\:]|[\;]|AND|not|var|boolean|real    { tok_string     TokenK }
-  while|do|for|to|writeln|const|string  { tok_string     TokenK }
-  [\,]|ID_List|program|if|then|else     { tok_string     TokenK }
-  sqrt|ln|sin|cos                       { tok_string     TokenK }
-  $alpha [$alpha $digit \_ \']*         { tok_string   TokenID }
+  $white+                                 ; -- remove multiple white-spaces
+  "//".*                                  ; -- skip one line comments
+  $digit+\.$digit*                        { tok_read     TokenFloat }
+  [\+]|[\-]|[\*]|[\/]|[=]|:=              { tok_string     TokenOp }
+  [\<]|[\>]|\<=|\>=                       { tok_string     TokenOp }
+  [\(]|[\)]|begin|end|true|false|OR       { tok_string     TokenK }
+  [\.]|[\:]|[\;]|AND|not|var|boolean|real { tok_string     TokenK }
+  while|do|for|to|writeln|const|string    { tok_string     TokenK }
+  [\,]|ID_List|program|if|then|else       { tok_string     TokenK }
+  sqrt|ln|sin|cos|exp                     { tok_string     TokenK }
+  $alpha [$alpha $digit \_ \']*           { tok_string   TokenID }
 {
 
 -- Some action helpers:

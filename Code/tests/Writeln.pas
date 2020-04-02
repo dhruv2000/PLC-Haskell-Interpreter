@@ -1,10 +1,11 @@
 begin
-    dd := 1.0 + 5.0 + 10.0;
-    //dd
-    a := dd;
-    writeln(dd);
-    b := a + dd;
-    writeln(b + dd);
-    f := 5.0;
-    var c : boolean := 6.0 < 7.0;
-end
+    var x : real := 42.0;
+    var y : boolean := true;
+    writeln(x);
+    writeln(y);
+
+    var test : real := 3.14;
+    writeln(test);
+    writeln(test + x);
+
+end.

@@ -10,5 +10,5 @@ main = do
     contents <- readFile fileName
     case parseString contents of 
         Left err -> print $ show err
-        Right ast -> putStrLn ((interpret ast) ++ "--------------------------------------------------------\n")
+        Right ast -> trace ("ast: " ++ (show ast)) putStrLn ("\n" ++ (interpret ast) ++ "\n--------------------------------------------------------\n")
 

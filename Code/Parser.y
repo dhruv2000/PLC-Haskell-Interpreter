@@ -41,7 +41,7 @@ import Lexer
         'ln'            { Token _ (TokenK "ln") }
         'sin'           { Token _ (TokenK "sin")  }
         'exp'           { Token _ (TokenK "exp")  }
-        'cos'           { Token _ (TokenK "false")}
+        'cos'           { Token _ (TokenK "cos")}
         'AND'           { Token _ (TokenK "AND") }
         'OR'            { Token _ (TokenK "OR") }
         'not'           { Token _ (TokenK "not") }
@@ -51,6 +51,7 @@ import Lexer
         'do'            { Token _ (TokenK "do") }
         'var'           { Token _ (TokenK "var") }
         ':'             { Token _ (TokenK ":") }
+        '.'             { Token _ (TokenK ".") }
         ';'             { Token _ (TokenK ";") }
         'boolean'       { Token _ (TokenK "boolean") }
         'real'          { Token _ (TokenK "real") }
@@ -75,7 +76,7 @@ import Lexer
 -- Entry point
 --TODO if you run into problems, the user is trying to do stuff before begin
 Program :: {Program}
-    : Defs 'begin' Statements 'end' { $3 }
+    : Defs 'begin' Statements 'end' '.' { $3 }
 
 
 Defs :: {[Definition]}

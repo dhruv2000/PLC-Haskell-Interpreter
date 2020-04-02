@@ -173,11 +173,13 @@ evalExpression (Var s) m = let f =  (Map.lookup s (head m)) in
                                         "real" -> Left (snd f);
                                         "boolean" -> Right (snd f);
                                 Nothing -> evalExpression (Var s) (tail m);
+evalExpression (Op1 op e1) m = Left (either show show (expression (Op1 op e1) m));
 evalExpression (Op2 op e1 e2) m = Left (either show show (expression (Op2 op e1 e2) m));
-evalExpression (OpB op e1 e2) m = Right (either show show (expression (OpB op e1 e2) m));
+evalExpression (OpB op e1 e2) m =  Right (either show show (expression (OpB op e1 e2) m));
 evalExpression (Comp op e1 e2) m = Right (either show show (expression (Comp op e1 e2) m));
 evalExpression (True_C) m = Right "True"
 evalExpression (False_C) m = Right "False"
+evalExpression (Not e1) m = Right (either show show (expression (Not e1) m));
 
 
 
@@ -192,7 +194,7 @@ expression False_C m = Right False
 
 --boolean Expressions
 expression (Not e1) m = Right (bibOp1 "NOT" (fromRight True (expression e1 m)))
-expression (OpB op v1 v2) m = Right (bibOp2 op (fromRight True (expression v1 m)) (fromRight True (expression v2 m)))
+expression (OpB op v1 v2) m =  Right (bibOp2 op (fromRight True (expression v1 m)) (fromRight True (expression v2 m)))
 expression (Comp op e1 e2) m =  Right (relBiOp op (fromLeft 500.6969 (expression e1 m)) (fromLeft 500.6969 (expression e2 m)))
 expression (Var s) m = let evaluated = evalVarExp s m in
         case evaluated of 
