@@ -74,7 +74,7 @@ interpret x = fst (interpretStart x [Map.empty])
 
 --Starting point after getting a global scope
 interpretStart :: Program -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)])
-interpretStart [] m = trace "booop" ("", [Map.empty])
+interpretStart [] m = trace "Empty Map DUMMY" ("", [Map.empty])
 interpretStart [x] m = interpretStatement x m
 interpretStart (x:xs) m = let curr = interpretStatement x m
                               next = interpretStart xs (snd curr) in
